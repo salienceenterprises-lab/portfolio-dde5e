@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import portfolioData from "../profile.json";
-import PortfolioNav from "./components/nav";
+
+import Sidebar from "./components/sidebar";
 import PortfolioHero from "./components/hero";
 import PortfolioAbout from "./components/about";
 import PortfolioEducation from "./components/education";
@@ -10,37 +11,36 @@ import PortfolioProjects from "./components/projects";
 import PortfolioSkills from "./components/skills";
 import PortfolioCommunity from "./components/community";
 import PortfolioContact from "./components/contact";
-import PortfolioFooter from "./components/footer";
 
 export default function DeployedPortfolio() {
   const data = portfolioData;
-  if (!data) return <div style={{ color: "#F7E7CE", padding: "40px", background: "#0A0618" }}>Loading…</div>;
+
+  if (!data) return (
+    <div style={{ minHeight: "100vh", background: "#f5f5f2", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span style={{ fontSize: "11px", color: "#b0b0aa", letterSpacing: "0.2em", textTransform: "uppercase" }}>Loading…</span>
+    </div>
+  );
 
   return (
-    <>
+    <div style={{ background: "#f5f5f2", minHeight: "100vh" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; scroll-padding-top: 72px; }
-        @keyframes cr-shimmer { 0%{background-position:200% center;} 100%{background-position:-200% center;} }
-        @keyframes cr-fade-up { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
-        @keyframes cr-glow { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
-        @keyframes cr-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
-        @keyframes cr-crown-drop { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
-        /* Responsive nav */
-        .cr-desktop-links { display: flex; align-items: center; gap: 2rem; }
-        .cr-hamburger { display: none; }
-        @media (max-width: 767px) {
-          .cr-desktop-links { display: none !important; }
-          .cr-hamburger { display: flex !important; }
-          .cr-nav-inner { padding: 0 1.25rem !important; }
-          .cr-hero-photo { display: none !important; }
-          .cr-two-col, .cr-contact-grid { display: block !important; }
-          .cr-two-col > *, .cr-contact-grid > * { margin-bottom: 2.5rem; }
+        ::placeholder { color: #c0c0bb; }
+        html { scroll-behavior: smooth; }
+        /* Sidebar layout */
+        .at-sidebar-desktop { display: none; }
+        @media (min-width: 1024px) { .at-sidebar-desktop { display: flex; } }
+        .at-sidebar-mobile { display: flex; }
+        @media (min-width: 1024px) { .at-sidebar-mobile { display: none; } }
+        @media (max-width: 1023px) {
+          .atelier-main { margin-left: 0 !important; padding-top: 52px !important; }
+          #hero { padding-bottom: 7rem !important; }
         }
       `}</style>
-      <div style={{ minHeight: "100vh", background: "#0A0618", color: "#F7E7CE" }}>
-        <PortfolioNav data={data} />
+
+      <Sidebar data={data} />
+
+      <main className="atelier-main" style={{ marginLeft: "220px" }}>
         <PortfolioHero data={data} />
         <PortfolioAbout data={data} />
         <PortfolioEducation data={data} />
@@ -49,8 +49,7 @@ export default function DeployedPortfolio() {
         <PortfolioSkills data={data} />
         <PortfolioCommunity data={data} />
         <PortfolioContact data={data} />
-        <PortfolioFooter data={data} />
-      </div>
-    </>
+      </main>
+    </div>
   );
 }

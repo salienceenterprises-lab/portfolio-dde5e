@@ -1,98 +1,175 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const DISPLAY   = '"Cinzel", Georgia, serif';
-const HEADING   = '"Raleway", system-ui, sans-serif';
-const BODY      = '"Lato", system-ui, sans-serif';
-const GOLD      = "#D4AF37";
-const CHAMPAGNE = "#F7E7CE";
-const IVORY     = "#FAF7F2";
-const AMETHYST  = "#7B4FC8";
-const CRIMSON   = "#9B1A4A";
+const fade = (delay = 0) => ({
+  initial: { opacity: 0, y: 12 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.55, ease: [0.25, 1, 0.5, 1], delay },
+});
 
 export default function PortfolioExperience({ data }) {
   const items = data?.experience;
   if (!items || !Array.isArray(items) || items.length === 0) return null;
 
+  const [open, setOpen] = useState(0);
+
   return (
-    <section id="experience" style={{ background: IVORY, padding: "8rem 2rem", position: "relative", overflow: "hidden" }}>
-      <style>{`@media(max-width:768px){#experience{padding:4rem 1.25rem!important;} .cr-exp-timeline{padding-left:2rem!important;} .cr-exp-dot{left:-2.35rem!important;}}`}</style>
-      {/* Faint heraldic bg */}
-      <div style={{ position: "absolute", inset: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cline x1='30' y1='4' x2='30' y2='56' stroke='rgba(123%2C79%2C200%2C0.04)' stroke-width='0.5'/%3E%3Cline x1='4' y1='30' x2='56' y2='30' stroke='rgba(123%2C79%2C200%2C0.04)' stroke-width='0.5'/%3E%3C/svg%3E")`, pointerEvents: "none" }} />
-      {/* Ghost numeral */}
-      <div style={{ position: "absolute", right: "2%", top: "50%", transform: "translateY(-50%)", fontFamily: DISPLAY, fontSize: "22vw", fontWeight: 700, color: "rgba(212,175,55,0.05)", lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>III</div>
+    <section id="experience" style={{
+      background: "#eeede9",
+      padding: "3.5rem 3rem",
+      borderBottom: "1px solid #ddddd8",
+    }}>
+      <style>{`
+        @media(max-width:768px){ #experience { padding: 2.5rem 1.5rem !important; } }
+        .at-exp-row {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          align-items: center;
+          gap: 1.5rem;
+        }
+        .at-exp-meta {
+          display: flex;
+          align-items: baseline;
+          gap: 1.25rem;
+          min-width: 0;
+        }
+        .at-exp-role {
+          font-size: 15px;
+          font-weight: 600;
+          color: #1a1a1a;
+          letter-spacing: -0.02em;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .at-exp-company {
+          font-size: 12px;
+          color: #888880;
+          white-space: nowrap;
+        }
+        .at-exp-right {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          flex-shrink: 0;
+        }
+        .at-exp-period {
+          font-size: 10px;
+          color: #b0b0aa;
+          letter-spacing: 0.06em;
+        }
+        .at-exp-body {
+          padding-bottom: 1.5rem;
+          padding-left: 2.5rem;
+        }
+        @media (max-width: 768px) {
+          .at-exp-row { gap: 0.75rem; }
+          .at-exp-meta { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+          .at-exp-role { white-space: normal; overflow: visible; text-overflow: unset; font-size: 14px; }
+          .at-exp-company { white-space: normal; font-size: 11px; }
+          .at-exp-right { gap: 0.75rem; }
+          .at-exp-period { font-size: 9px; }
+          .at-exp-body { padding-left: 0; }
+        }
+      `}</style>
 
-      <div style={{ maxWidth: "1280px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-        {/* Header */}
-        <div style={{ marginBottom: "4rem" }}>
-          <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            style={{ height: "1px", background: `linear-gradient(90deg, ${GOLD}, transparent)`, marginBottom: "1.5rem", transformOrigin: "left", maxWidth: "120px" }} />
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-            style={{ display: "flex", alignItems: "baseline", gap: "1rem" }}>
-            <span style={{ fontFamily: HEADING, fontSize: "10px", fontWeight: 600, color: `${GOLD}80`, letterSpacing: "0.35em", textTransform: "uppercase" }}>III</span>
-            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 600, color: "#1A0E30", margin: 0, letterSpacing: "0.1em", textTransform: "uppercase" }}>Experience</h2>
-          </motion.div>
-        </div>
+      <motion.div {...fade(0)} style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}>
+        <p style={{ fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.28em", color: "#b0b0aa", margin: 0 }}>
+          Experience
+        </p>
+        <div style={{ flex: 1, height: "1px", background: "#ddddd8" }} />
+      </motion.div>
 
-        <div style={{ position: "relative" }}>
-          {/* Vertical spine */}
-          <motion.div initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true }} transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
-            style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "2px", background: `linear-gradient(180deg, ${GOLD}, ${AMETHYST}60, transparent)`, transformOrigin: "top" }} />
+      <div>
+        {items.map((job, i) => {
+          const isOpen = open === i;
+          const period = job.period || job.duration || job.years || "";
+          const role = job.role || job.title || job.position || "";
+          const company = job.company || job.employer || job.organization || "";
+          const highlights = Array.isArray(job.highlights) ? job.highlights
+            : Array.isArray(job.responsibilities) ? job.responsibilities
+            : Array.isArray(job.bullets) ? job.bullets : [];
+          const description = job.description || "";
+          const stack = Array.isArray(job.stack) ? job.stack
+            : Array.isArray(job.tech) ? job.tech
+            : Array.isArray(job.tags) ? job.tags : [];
 
-          <div className="cr-exp-timeline" style={{ paddingLeft: "3rem" }}>
-            {items.map((exp, i) => {
-              const accent = i % 3 === 0 ? GOLD : i % 3 === 1 ? AMETHYST : CRIMSON;
-              return (
-                <motion.div key={i}
-                  initial={{ opacity: 0, x: -28 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-30px" }}
-                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: i * 0.07 }}
-                  style={{ position: "relative", paddingBottom: i < items.length - 1 ? "4rem" : "0" }}
-                >
-                  {/* Crown-point marker on spine */}
-                  <div className="cr-exp-dot" style={{ position: "absolute", left: "-3.55rem", top: "2px", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
-                    <div style={{ width: 0, height: 0, borderLeft: "5px solid transparent", borderRight: "5px solid transparent", borderBottom: `7px solid ${accent}` }} />
-                    <div style={{ width: "10px", height: "10px", background: accent, borderRadius: "1px" }} />
-                  </div>
+          return (
+            <motion.div key={i} {...fade(i * 0.04)} style={{ borderBottom: "1px solid #ddddd8" }}>
+              {/* Row header — always visible */}
+              <button
+                onClick={() => setOpen(isOpen ? -1 : i)}
+                style={{
+                  width: "100%", background: "none", border: "none",
+                  padding: "1.1rem 0", cursor: "pointer", textAlign: "left",
+                }}
+                className="at-exp-row"
+              >
+                <div className="at-exp-meta">
+                  <span style={{ fontSize: "9px", color: "#c0c0bb", letterSpacing: "0.08em", flexShrink: 0 }}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="at-exp-role">{role}</span>
+                  {company && <span className="at-exp-company">{company}</span>}
+                </div>
+                <div className="at-exp-right">
+                  {period && <span className="at-exp-period">{period}</span>}
+                  <span style={{
+                    fontSize: "14px", color: "#b0b0aa", lineHeight: 1,
+                    transform: isOpen ? "rotate(45deg)" : "none",
+                    transition: "transform 0.2s ease", display: "inline-block",
+                  }}>+</span>
+                </div>
+              </button>
 
-                  <div style={{ fontFamily: HEADING, fontSize: "9px", fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: `${accent}CC`, marginBottom: "0.5rem" }}>
-                    {exp.period || exp.duration || exp.startDate}
-                  </div>
-                  <h3 style={{ fontFamily: DISPLAY, fontSize: "clamp(1.05rem,2vw,1.4rem)", fontWeight: 600, color: "#1A0E30", margin: "0 0 4px", letterSpacing: "0.07em", textTransform: "uppercase" }}>
-                    {exp.role || exp.title || exp.position}
-                  </h3>
-                  <p style={{ fontFamily: HEADING, fontSize: "12px", fontWeight: 500, color: `${accent}CC`, margin: "0 0 1rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                    {exp.company || exp.organization}
-                  </p>
-                  {exp.description && (
-                    <p style={{ fontFamily: BODY, fontSize: "13.5px", color: "rgba(42,26,68,0.55)", lineHeight: 1.85, margin: "0 0 1rem", maxWidth: "640px" }}>{exp.description}</p>
-                  )}
-                  {(exp.highlights || exp.responsibilities || exp.bullets)?.length > 0 && (
-                    <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1rem", display: "flex", flexDirection: "column", gap: "6px", maxWidth: "640px" }}>
-                      {(exp.highlights || exp.responsibilities || exp.bullets).map((r, j) => (
-                        <li key={j} style={{ display: "flex", gap: "12px", fontFamily: BODY, fontSize: "13px", color: "rgba(42,26,68,0.5)", lineHeight: 1.7 }}>
-                          <span style={{ color: `${GOLD}80`, flexShrink: 0, marginTop: "5px", fontSize: "7px" }}>◆</span>{r}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {(Array.isArray(exp.stack) ? exp.stack : Array.isArray(exp.tech) ? exp.tech : Array.isArray(exp.tags) ? exp.tags : []).length > 0 && (
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "0.75rem" }}>
-                      {(Array.isArray(exp.stack) ? exp.stack : Array.isArray(exp.tech) ? exp.tech : Array.isArray(exp.tags) ? exp.tags : []).map((t, j) => {
-                        const label = typeof t === "string" ? t : t?.name || t?.label || String(t);
-                        return (
-                          <span key={j} style={{ fontFamily: BODY, fontSize: "10px", padding: "3px 12px", border: "1px solid rgba(42,26,68,0.12)", color: "rgba(42,26,68,0.45)", letterSpacing: "0.02em" }}>{label}</span>
-                        );
-                      })}
+              {/* Expandable detail */}
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    style={{ overflow: "hidden" }}
+                  >
+                    <div className="at-exp-body">
+                      {description && (
+                        <p style={{ fontSize: "13px", color: "#6a6a65", lineHeight: 1.75, margin: "0 0 1rem" }}>
+                          {description}
+                        </p>
+                      )}
+                      {highlights.length > 0 && (
+                        <ul style={{ margin: "0 0 1rem", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                          {highlights.map((h, j) => (
+                            <li key={j} style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start" }}>
+                              <span style={{ color: "#c0c0bb", fontSize: "10px", marginTop: "3px", flexShrink: 0 }}>—</span>
+                              <span style={{ fontSize: "13px", color: "#6a6a65", lineHeight: 1.65 }}>{h}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {stack.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                          {stack.map((t, j) => {
+                            const label = typeof t === "string" ? t : t?.name || t?.label || String(t);
+                            return (
+                              <span key={j} style={{
+                                fontSize: "9.5px", fontWeight: 500, color: "#888880",
+                                padding: "2px 8px", border: "1px solid #ddddd8", letterSpacing: "0.04em",
+                              }}>{label}</span>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );
